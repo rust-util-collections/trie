@@ -1804,12 +1804,12 @@ where
 		#[cfg(feature = "std")]
 		trace!(target: "trie", "Committing trie changes to db.");
 
-		// always kill all the nodes on death row.
-		#[cfg(feature = "std")]
-		trace!(target: "trie", "{:?} nodes to remove from db", self.death_row.len());
-		for (hash, prefix) in self.death_row.drain() {
-			self.db.remove(&hash, (&prefix.0[..], prefix.1));
-		}
+		// // always kill all the nodes on death row.
+		// #[cfg(feature = "std")]
+		// trace!(target: "trie", "{:?} nodes to remove from db", self.death_row.len());
+		// for (hash, prefix) in self.death_row.drain() {
+		// 	self.db.remove(&hash, (&prefix.0[..], prefix.1));
+		// }
 
 		let handle = match self.root_handle() {
 			NodeHandle::Hash(_) => return, // no changes necessary.
