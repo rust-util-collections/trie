@@ -1810,6 +1810,7 @@ where
 		// for (hash, prefix) in self.death_row.drain() {
 		// 	self.db.remove(&hash, (&prefix.0[..], prefix.1));
 		// }
+		for (_, _) in self.death_row.drain() {}
 
 		let handle = match self.root_handle() {
 			NodeHandle::Hash(_) => return, // no changes necessary.
