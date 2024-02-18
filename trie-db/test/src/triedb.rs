@@ -17,10 +17,10 @@ use std::ops::Deref;
 use hash_db::{HashDB, Hasher, EMPTY_PREFIX};
 use hex_literal::hex;
 use memory_db::{HashKey, MemoryDB, PrefixedKey};
-use reference_trie::{
+use reference_trie_fun::{
 	test_layouts, test_layouts_substrate, HashedValueNoExtThreshold, TestTrieCache,
 };
-use trie_db::{
+use trie_db_fun::{
 	encode_compact, CachedValue, DBValue, Lookup, NibbleSlice, RecordedForKey, Recorder, Trie,
 	TrieCache, TrieDBBuilder, TrieDBMutBuilder, TrieLayout, TrieMut, TrieRecorder,
 };
@@ -175,19 +175,19 @@ fn iterator_seek_internal<T: TrieLayout>() {
 	let mut iter = t.iter().unwrap();
 	iter.seek(b"AA").unwrap();
 	assert_eq!(&vals[1..], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
-	let iter = trie_db::TrieDBIterator::new_prefixed(&t, b"aaaaa").unwrap();
+	let iter = trie_db_fun::TrieDBIterator::new_prefixed(&t, b"aaaaa").unwrap();
 	assert_eq!(&vals[..0], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
-	let iter = trie_db::TrieDBIterator::new_prefixed(&t, b"A").unwrap();
+	let iter = trie_db_fun::TrieDBIterator::new_prefixed(&t, b"A").unwrap();
 	assert_eq!(&vals[..4], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
-	let iter = trie_db::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AA").unwrap();
+	let iter = trie_db_fun::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AA").unwrap();
 	assert_eq!(&vals[1..4], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
-	let iter = trie_db::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AR").unwrap();
+	let iter = trie_db_fun::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AR").unwrap();
 	assert_eq!(&vals[3..4], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
-	let iter = trie_db::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AS").unwrap();
+	let iter = trie_db_fun::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AS").unwrap();
 	assert_eq!(&vals[3..4], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
-	let iter = trie_db::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AB").unwrap();
+	let iter = trie_db_fun::TrieDBIterator::new_prefixed_then_seek(&t, b"A", b"AB").unwrap();
 	assert_eq!(&vals[2..4], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
-	let iter = trie_db::TrieDBIterator::new_prefixed_then_seek(&t, b"", b"AB").unwrap();
+	let iter = trie_db_fun::TrieDBIterator::new_prefixed_then_seek(&t, b"", b"AB").unwrap();
 	assert_eq!(&vals[2..], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
 	let mut iter = t.iter().unwrap();
 	iter.seek(b"A!").unwrap();
@@ -206,7 +206,7 @@ fn iterator_seek_internal<T: TrieLayout>() {
 	assert_eq!(&vals[5..], &iter.map(|x| x.unwrap().1).collect::<Vec<_>>()[..]);
 }
 
-fn trie_from_hex_keys<T>(keys: &[&str], callback: impl FnOnce(&mut trie_db::TrieDB<T>))
+fn trie_from_hex_keys<T>(keys: &[&str], callback: impl FnOnce(&mut trie_db_fun::TrieDB<T>))
 where
 	T: TrieLayout,
 {
@@ -234,7 +234,7 @@ fn test_prefixed_then_seek<T: TrieLayout>(
 
 	trie_from_hex_keys::<T>(keys, |trie| {
 		let iter =
-			trie_db::TrieDBIterator::new_prefixed_then_seek(&trie, &prefix_key, &seek_key).unwrap();
+			trie_db_fun::TrieDBIterator::new_prefixed_then_seek(&trie, &prefix_key, &seek_key).unwrap();
 		let output: Vec<_> = iter.map(|x| array_bytes::bytes2hex("", x.unwrap().0)).collect();
 		assert_eq!(output, expected);
 	});

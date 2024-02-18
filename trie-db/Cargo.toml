@@ -1,5 +1,5 @@
 [package]
-name = "trie-db"
+name = "trie-db-fun"
 version = "0.28.0"
 authors = ["Parity Technologies <admin@parity.io>"]
 description = "Merkle-Patricia Trie generic over key hasher and node encoding"

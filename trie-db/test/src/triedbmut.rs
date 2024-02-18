@@ -18,12 +18,12 @@ use env_logger;
 use hash_db::{HashDB, Hasher, EMPTY_PREFIX};
 use log::debug;
 use memory_db::{HashKey, MemoryDB, PrefixedKey};
-use reference_trie::{
+use reference_trie_fun::{
 	reference_trie_root, test_layouts, ExtensionLayout, HashedValueNoExt,
 	HashedValueNoExtThreshold, NoExtensionLayout, RefHasher, ReferenceNodeCodec,
 	ReferenceNodeCodecNoExt, TestTrieCache,
 };
-use trie_db::{
+use trie_db_fun::{
 	DBValue, NodeCodec, Recorder, Trie, TrieCache, TrieDBBuilder, TrieDBMut, TrieDBMutBuilder,
 	TrieError, TrieLayout, TrieMut, Value,
 };
@@ -213,7 +213,7 @@ fn remove_to_empty_no_extension_internal<T: TrieLayout>() {
 	}
 	assert_eq!(
 		&root,
-		&reference_trie::calc_root::<T, _, _, _>(vec![
+		&reference_trie_fun::calc_root::<T, _, _, _>(vec![
 			(vec![0x01u8, 0x23], big_value3.to_vec()),
 			(vec![0x01u8, 0x34], big_value.to_vec()),
 		])
@@ -404,7 +404,7 @@ fn test_at_three_internal<T: TrieLayout>() {
 fn test_nibbled_branch_changed_value() {
 	let mut memdb = MemoryDB::<RefHasher, PrefixedKey<_>, DBValue>::default();
 	let mut root = Default::default();
-	let mut t = reference_trie::RefTrieDBMutNoExtBuilder::new(&mut memdb, &mut root).build();
+	let mut t = reference_trie_fun::RefTrieDBMutNoExtBuilder::new(&mut memdb, &mut root).build();
 	t.insert(&[0x01u8, 0x23], &[0x01u8, 0x23]).unwrap();
 	t.insert(&[0x01u8, 0x23, 0x11], &[0xf1u8, 0x23]).unwrap();
 	assert_eq!(t.get(&[0x01u8, 0x23]).unwrap(), Some(vec![0x01u8, 0x23]));
@@ -531,12 +531,12 @@ fn return_old_values_internal<T: TrieLayout>() {
 fn insert_empty_allowed() {
 	let mut db = MemoryDB::<RefHasher, PrefixedKey<_>, DBValue>::default();
 	let mut root = Default::default();
-	let mut t = reference_trie::RefTrieDBMutAllowEmptyBuilder::new(&mut db, &mut root).build();
+	let mut t = reference_trie_fun::RefTrieDBMutAllowEmptyBuilder::new(&mut db, &mut root).build();
 	t.insert(b"test", &[]).unwrap();
 
 	assert_eq!(
 		*t.root(),
-		reference_trie_root::<reference_trie::AllowEmptyLayout, _, _, _>(vec![(
+		reference_trie_root::<reference_trie_fun::AllowEmptyLayout, _, _, _>(vec![(
 			b"test".to_vec(),
 			Vec::new()
 		)],)
@@ -547,7 +547,7 @@ fn insert_empty_allowed() {
 #[test]
 fn register_proof_without_value() {
 	use hash_db::{AsHashDB, Prefix};
-	use reference_trie::HashedValueNoExtThreshold;
+	use reference_trie_fun::HashedValueNoExtThreshold;
 	use std::{cell::RefCell, collections::HashMap};
 
 	type Layout = HashedValueNoExtThreshold<1>;
@@ -647,7 +647,7 @@ fn register_proof_without_value() {
 	let mut memdb_from_proof = db_unpacked.clone();
 	let mut root_proof = root_unpacked.clone();
 	{
-		use trie_db::Trie;
+		use trie_db_fun::Trie;
 		let trie = TrieDBBuilder::<Layout>::new(&memdb_from_proof, &root_proof).build();
 		assert!(trie.get(b"te").unwrap().is_some());
 		assert!(matches!(

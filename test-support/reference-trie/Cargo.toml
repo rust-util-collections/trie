@@ -1,5 +1,5 @@
 [package]
-name = "reference-trie"
+name = "reference-trie-fun"
 version = "0.29.1"
 authors = ["Parity Technologies <admin@parity.io>"]
 description = "Simple reference trie format"
@@ -10,7 +10,7 @@ edition = "2018"
 [dependencies]
 hash-db = { path = "../../hash-db" , version = "0.16.0"}
 keccak-hasher = { path = "../keccak-hasher", version = "0.16.0" }
-trie-db = { path = "../../trie-db", default-features = false, version = "0.28.0" }
+trie-db-fun = { path = "../../trie-db", default-features = false, version = "0.28.0" }
 trie-root = { path = "../../trie-root", default-features = false, version = "0.18.0" }
 parity-scale-codec = { version = "3.0.0", features = ["derive"] }
 hashbrown = { version = "0.14.1", default-features = false, features = ["ahash"] }
@@ -28,6 +28,6 @@ harness = false
 default = ["std"]
 # no actual support for std, only to avoid a cargo issues
 std = [
-  "trie-db/std",
+  "trie-db-fun/std",
   "trie-root/std",
 ]

@@ -18,7 +18,7 @@
 mod test {
 	use hex_literal::hex;
 	use keccak_hasher::KeccakHasher;
-	use reference_trie::ReferenceTrieStream;
+	use reference_trie_fun::ReferenceTrieStream;
 	use trie_root::{sec_trie_root, trie_root};
 
 	#[test]

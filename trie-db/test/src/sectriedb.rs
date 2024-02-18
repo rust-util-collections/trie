@@ -14,8 +14,8 @@
 
 use hash_db::Hasher;
 use memory_db::{HashKey, MemoryDB};
-use reference_trie::{RefHasher, RefSecTrieDB, RefTrieDBMutBuilder};
-use trie_db::{DBValue, Trie, TrieMut};
+use reference_trie_fun::{RefHasher, RefSecTrieDB, RefTrieDBMutBuilder};
+use trie_db_fun::{DBValue, Trie, TrieMut};
 
 #[test]
 fn trie_to_sectrie() {

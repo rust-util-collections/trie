@@ -14,8 +14,8 @@
 
 use hash_db::{Hasher, EMPTY_PREFIX};
 use memory_db::{HashKey, MemoryDB};
-use reference_trie::{RefFatDBMut, RefHasher, RefTrieDBBuilder};
-use trie_db::{Trie, TrieMut};
+use reference_trie_fun::{RefFatDBMut, RefHasher, RefTrieDBBuilder};
+use trie_db_fun::{Trie, TrieMut};
 
 #[test]
 fn fatdbmut_to_trie() {

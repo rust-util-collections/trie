@@ -1,6 +1,6 @@
 use crate::rstd::{result::Result, vec::Vec};
 use hash_db::{HashDBRef, Hasher};
-use trie_db::{
+use trie_db_fun::{
 	node::{decode_hash, Node, NodeHandle, Value},
 	recorder::Recorder,
 	CError, DBValue, NibbleSlice, NodeCodec, Result as TrieResult, Trie, TrieDBBuilder, TrieHash,

@@ -726,8 +726,8 @@ impl<'db, L: TrieLayout> TrieDBMutBuilder<'db, L> {
 /// # Example
 /// ```ignore
 /// use hash_db::Hasher;
-/// use reference_trie::{RefTrieDBMut, TrieMut};
-/// use trie_db::DBValue;
+/// use reference_trie_fun::{RefTrieDBMut, TrieMut};
+/// use trie_db_fun::DBValue;
 /// use keccak_hasher::KeccakHasher;
 /// use memory_db::*;
 ///

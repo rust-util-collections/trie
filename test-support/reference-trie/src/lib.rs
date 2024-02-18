@@ -17,7 +17,7 @@
 use hashbrown::{hash_map::Entry, HashMap};
 use parity_scale_codec::{Compact, Decode, Encode, Error as CodecError, Input, Output};
 use std::{borrow::Borrow, fmt, iter::once, marker::PhantomData, ops::Range};
-use trie_db::{
+use trie_db_fun::{
 	nibble_ops,
 	node::{NibbleSlicePlan, NodeHandlePlan, NodeOwned, NodePlan, Value, ValuePlan},
 	trie_visit,
@@ -31,7 +31,7 @@ use trie_root::{Hasher, Value as TrieStreamValue};
 mod substrate;
 mod substrate_like;
 pub mod node {
-	pub use trie_db::node::Node;
+	pub use trie_db_fun::node::Node;
 }
 
 pub use substrate_like::{
@@ -174,22 +174,22 @@ impl Bitmap {
 	}
 }
 
-pub type RefTrieDB<'a, 'cache> = trie_db::TrieDB<'a, 'cache, ExtensionLayout>;
-pub type RefTrieDBBuilder<'a, 'cache> = trie_db::TrieDBBuilder<'a, 'cache, ExtensionLayout>;
-pub type RefTrieDBMut<'a> = trie_db::TrieDBMut<'a, ExtensionLayout>;
-pub type RefTrieDBMutBuilder<'a> = trie_db::TrieDBMutBuilder<'a, ExtensionLayout>;
-pub type RefTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, NoExtensionLayout>;
-pub type RefTrieDBMutNoExtBuilder<'a> = trie_db::TrieDBMutBuilder<'a, NoExtensionLayout>;
-pub type RefTrieDBMutAllowEmpty<'a> = trie_db::TrieDBMut<'a, AllowEmptyLayout>;
-pub type RefTrieDBMutAllowEmptyBuilder<'a> = trie_db::TrieDBMutBuilder<'a, AllowEmptyLayout>;
+pub type RefTrieDB<'a, 'cache> = trie_db_fun::TrieDB<'a, 'cache, ExtensionLayout>;
+pub type RefTrieDBBuilder<'a, 'cache> = trie_db_fun::TrieDBBuilder<'a, 'cache, ExtensionLayout>;
+pub type RefTrieDBMut<'a> = trie_db_fun::TrieDBMut<'a, ExtensionLayout>;
+pub type RefTrieDBMutBuilder<'a> = trie_db_fun::TrieDBMutBuilder<'a, ExtensionLayout>;
+pub type RefTrieDBMutNoExt<'a> = trie_db_fun::TrieDBMut<'a, NoExtensionLayout>;
+pub type RefTrieDBMutNoExtBuilder<'a> = trie_db_fun::TrieDBMutBuilder<'a, NoExtensionLayout>;
+pub type RefTrieDBMutAllowEmpty<'a> = trie_db_fun::TrieDBMut<'a, AllowEmptyLayout>;
+pub type RefTrieDBMutAllowEmptyBuilder<'a> = trie_db_fun::TrieDBMutBuilder<'a, AllowEmptyLayout>;
 pub type RefTestTrieDBCache = TestTrieCache<ExtensionLayout>;
 pub type RefTestTrieDBCacheNoExt = TestTrieCache<NoExtensionLayout>;
-pub type RefFatDB<'a, 'cache> = trie_db::FatDB<'a, 'cache, ExtensionLayout>;
-pub type RefFatDBMut<'a> = trie_db::FatDBMut<'a, ExtensionLayout>;
-pub type RefSecTrieDB<'a, 'cache> = trie_db::SecTrieDB<'a, 'cache, ExtensionLayout>;
-pub type RefSecTrieDBMut<'a> = trie_db::SecTrieDBMut<'a, ExtensionLayout>;
-pub type RefLookup<'a, 'cache, Q> = trie_db::Lookup<'a, 'cache, ExtensionLayout, Q>;
-pub type RefLookupNoExt<'a, 'cache, Q> = trie_db::Lookup<'a, 'cache, NoExtensionLayout, Q>;
+pub type RefFatDB<'a, 'cache> = trie_db_fun::FatDB<'a, 'cache, ExtensionLayout>;
+pub type RefFatDBMut<'a> = trie_db_fun::FatDBMut<'a, ExtensionLayout>;
+pub type RefSecTrieDB<'a, 'cache> = trie_db_fun::SecTrieDB<'a, 'cache, ExtensionLayout>;
+pub type RefSecTrieDBMut<'a> = trie_db_fun::SecTrieDBMut<'a, ExtensionLayout>;
+pub type RefLookup<'a, 'cache, Q> = trie_db_fun::Lookup<'a, 'cache, ExtensionLayout, Q>;
+pub type RefLookupNoExt<'a, 'cache, Q> = trie_db_fun::Lookup<'a, 'cache, NoExtensionLayout, Q>;
 
 pub fn reference_trie_root<T: TrieLayout, I, A, B>(input: I) -> <T::Hash as Hasher>::Out
 where
@@ -225,7 +225,7 @@ where
 	A: AsRef<[u8]> + Ord + fmt::Debug,
 	B: AsRef<[u8]> + fmt::Debug,
 {
-	let mut cb = trie_db::TrieRoot::<T>::default();
+	let mut cb = trie_db_fun::TrieRoot::<T>::default();
 	trie_visit::<T, _, _, _, _>(data_sorted_unique(input), &mut cb);
 	cb.root.unwrap_or_default()
 }
@@ -966,7 +966,7 @@ pub fn compare_root<T: TrieLayout, DB: hash_db::HashDB<T::Hash, DBValue>>(
 /// Compare trie builder and trie root unhashed implementations.
 pub fn compare_unhashed(data: Vec<(Vec<u8>, Vec<u8>)>) {
 	let root_new = {
-		let mut cb = trie_db::TrieRootUnhashed::<ExtensionLayout>::default();
+		let mut cb = trie_db_fun::TrieRootUnhashed::<ExtensionLayout>::default();
 		trie_visit::<ExtensionLayout, _, _, _, _>(data.clone().into_iter(), &mut cb);
 		cb.root.unwrap_or(Default::default())
 	};
@@ -979,7 +979,7 @@ pub fn compare_unhashed(data: Vec<(Vec<u8>, Vec<u8>)>) {
 /// This uses the variant without extension nodes.
 pub fn compare_unhashed_no_extension(data: Vec<(Vec<u8>, Vec<u8>)>) {
 	let root_new = {
-		let mut cb = trie_db::TrieRootUnhashed::<NoExtensionLayout>::default();
+		let mut cb = trie_db_fun::TrieRootUnhashed::<NoExtensionLayout>::default();
 		trie_visit::<NoExtensionLayout, _, _, _, _>(data.clone().into_iter(), &mut cb);
 		cb.root.unwrap_or(Default::default())
 	};
@@ -1114,7 +1114,7 @@ pub fn compare_insert_remove<T, DB: hash_db::HashDB<T::Hash, DBValue>>(
 /// Should not be used for anything in production.
 pub struct TestTrieCache<L: TrieLayout> {
 	/// In a real implementation we need to make sure that this is unique per trie root.
-	value_cache: HashMap<Vec<u8>, trie_db::CachedValue<TrieHash<L>>>,
+	value_cache: HashMap<Vec<u8>, trie_db_fun::CachedValue<TrieHash<L>>>,
 	node_cache: HashMap<TrieHash<L>, NodeOwned<TrieHash<L>>>,
 }
 
@@ -1136,24 +1136,24 @@ impl<L: TrieLayout> Default for TestTrieCache<L> {
 	}
 }
 
-impl<L: TrieLayout> trie_db::TrieCache<L::Codec> for TestTrieCache<L> {
-	fn lookup_value_for_key(&mut self, key: &[u8]) -> Option<&trie_db::CachedValue<TrieHash<L>>> {
+impl<L: TrieLayout> trie_db_fun::TrieCache<L::Codec> for TestTrieCache<L> {
+	fn lookup_value_for_key(&mut self, key: &[u8]) -> Option<&trie_db_fun::CachedValue<TrieHash<L>>> {
 		self.value_cache.get(key)
 	}
 
-	fn cache_value_for_key(&mut self, key: &[u8], value: trie_db::CachedValue<TrieHash<L>>) {
+	fn cache_value_for_key(&mut self, key: &[u8], value: trie_db_fun::CachedValue<TrieHash<L>>) {
 		self.value_cache.insert(key.to_vec(), value);
 	}
 
 	fn get_or_insert_node(
 		&mut self,
 		hash: TrieHash<L>,
-		fetch_node: &mut dyn FnMut() -> trie_db::Result<
+		fetch_node: &mut dyn FnMut() -> trie_db_fun::Result<
 			NodeOwned<TrieHash<L>>,
 			TrieHash<L>,
-			trie_db::CError<L>,
+			trie_db_fun::CError<L>,
 		>,
-	) -> trie_db::Result<&NodeOwned<TrieHash<L>>, TrieHash<L>, trie_db::CError<L>> {
+	) -> trie_db_fun::Result<&NodeOwned<TrieHash<L>>, TrieHash<L>, trie_db_fun::CError<L>> {
 		match self.node_cache.entry(hash) {
 			Entry::Occupied(e) => Ok(e.into_mut()),
 			Entry::Vacant(e) => {
@@ -1171,12 +1171,12 @@ impl<L: TrieLayout> trie_db::TrieCache<L::Codec> for TestTrieCache<L> {
 #[cfg(test)]
 mod tests {
 	use super::*;
-	use trie_db::{nibble_ops::NIBBLE_PER_BYTE, node::Node};
+	use trie_db_fun::{nibble_ops::NIBBLE_PER_BYTE, node::Node};
 
 	const _: fn() -> () = || {
 		struct AssertTrieDBRawIteratorIsSendAndSync
 		where
-			trie_db::TrieDBRawIterator<NoExtensionLayout>: Send + Sync;
+			trie_db_fun::TrieDBRawIterator<NoExtensionLayout>: Send + Sync;
 	};
 
 	#[test]

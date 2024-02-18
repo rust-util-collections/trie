@@ -13,9 +13,9 @@
 // limitations under the License.
 
 use hash_db::Hasher;
-use reference_trie::{test_layouts, NoExtensionLayout};
+use reference_trie_fun::{test_layouts, NoExtensionLayout};
 
-use trie_db::{
+use trie_db_fun::{
 	proof::{generate_proof, verify_proof, VerifyError},
 	DBValue, Trie, TrieDBBuilder, TrieDBMutBuilder, TrieLayout, TrieMut,
 };

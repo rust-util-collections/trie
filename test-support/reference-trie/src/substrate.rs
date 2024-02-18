@@ -20,7 +20,7 @@ use core::{borrow::Borrow, iter::once, marker::PhantomData, ops::Range};
 use hash_db::Hasher;
 use parity_scale_codec as codec;
 use parity_scale_codec::{Compact, Decode, Encode, Input, Output};
-use trie_db::{
+use trie_db_fun::{
 	nibble_ops,
 	node::{NibbleSlicePlan, NodeHandlePlan, NodePlan, Value, ValuePlan},
 	ChildReference, NodeCodec as NodeCodecT, TrieConfiguration, TrieLayout,
@@ -701,7 +701,7 @@ pub enum Error<H> {
 	BadFormat,
 	Decode(codec::Error),
 	InvalidRecording(Vec<u8>, bool),
-	TrieError(Box<trie_db::TrieError<H, Self>>),
+	TrieError(Box<trie_db_fun::TrieError<H, Self>>),
 }
 
 impl<H> core::fmt::Display for Error<H> {
@@ -718,8 +718,8 @@ impl<H> From<codec::Error> for Error<H> {
 	}
 }
 
-impl<H> From<Box<trie_db::TrieError<H, Self>>> for Error<H> {
-	fn from(x: Box<trie_db::TrieError<H, Self>>) -> Self {
+impl<H> From<Box<trie_db_fun::TrieError<H, Self>>> for Error<H> {
+	fn from(x: Box<trie_db_fun::TrieError<H, Self>>) -> Self {
 		Error::TrieError(x)
 	}
 }

@@ -15,11 +15,11 @@
 use arbitrary::Arbitrary;
 use hash_db::Hasher;
 use memory_db::{HashKey, MemoryDB, PrefixedKey};
-use reference_trie::{
+use reference_trie_fun::{
 	calc_root, compare_insert_remove, reference_trie_root_iter_build as reference_trie_root,
 };
 use std::convert::TryInto;
-use trie_db::{
+use trie_db_fun::{
 	proof::{generate_proof, verify_proof},
 	DBValue, Trie, TrieDBBuilder, TrieDBIterator, TrieDBMutBuilder, TrieLayout, TrieMut,
 };
@@ -137,7 +137,7 @@ pub fn fuzz_that_compare_implementations<T: TrieLayout>(input: &[u8]) {
 	//println!("data:{:?}", &data);
 	let memdb = MemoryDB::<_, PrefixedKey<_>, _>::default();
 	let hashdb = MemoryDB::<T::Hash, PrefixedKey<_>, DBValue>::default();
-	reference_trie::compare_implementations::<T, _>(data, memdb, hashdb);
+	reference_trie_fun::compare_implementations::<T, _>(data, memdb, hashdb);
 }
 
 pub fn fuzz_that_no_extension_insert<T: TrieLayout>(input: &[u8]) {
@@ -293,7 +293,7 @@ pub fn fuzz_prefix_seek_iter<T: TrieLayout>(mut input: PrefixSeekTestInput) {
 
 	let trie = TrieDBBuilder::<T>::new(&memdb, &root).build();
 	let iter =
-		trie_db::TrieDBIterator::new_prefixed_then_seek(&trie, &input.prefix_key, &input.seek_key)
+		trie_db_fun::TrieDBIterator::new_prefixed_then_seek(&trie, &input.prefix_key, &input.seek_key)
 			.unwrap();
 	let output_keys: Vec<_> = iter.map(|item| item.unwrap().0).collect();
 
@@ -419,7 +419,7 @@ fn test_generate_proof<L: TrieLayout>(
 
 fn test_trie_codec_proof<L: TrieLayout>(entries: Vec<(Vec<u8>, Vec<u8>)>, keys: Vec<Vec<u8>>) {
 	use hash_db::{HashDB, EMPTY_PREFIX};
-	use trie_db::{decode_compact, encode_compact, Recorder};
+	use trie_db_fun::{decode_compact, encode_compact, Recorder};
 
 	// Populate DB with full trie from entries.
 	let (db, root) = {

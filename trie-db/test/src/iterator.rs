@@ -14,8 +14,8 @@
 
 use hash_db::{HashDB, Hasher};
 use hex_literal::hex;
-use reference_trie::test_layouts;
-use trie_db::{
+use reference_trie_fun::test_layouts;
+use trie_db_fun::{
 	node::{Node, Value},
 	DBValue, NibbleSlice, NibbleVec, TrieDBBuilder, TrieDBNodeIterator, TrieError, TrieIterator,
 	TrieLayout, TrieMut,
@@ -33,7 +33,7 @@ pub(crate) fn build_trie_db<T: TrieLayout>(
 	let mut memdb = MemoryDB::<T>::default();
 	let mut root = Default::default();
 	{
-		let mut t = trie_db::TrieDBMutBuilder::<T>::new(&mut memdb, &mut root).build();
+		let mut t = trie_db_fun::TrieDBMutBuilder::<T>::new(&mut memdb, &mut root).build();
 		for (x, y) in pairs.iter() {
 			t.insert(x, y).unwrap();
 		}

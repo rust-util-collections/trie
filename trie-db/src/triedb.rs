@@ -107,8 +107,8 @@ impl<'db, 'cache, L: TrieLayout> TrieDBBuilder<'db, 'cache, L> {
 /// # Example
 /// ```ignore
 /// use hash_db::Hasher;
-/// use reference_trie::{RefTrieDBMut, RefTrieDB, Trie, TrieMut};
-/// use trie_db::DBValue;
+/// use reference_trie_fun::{RefTrieDBMut, RefTrieDB, Trie, TrieMut};
+/// use trie_db_fun::DBValue;
 /// use keccak_hasher::KeccakHasher;
 /// use memory_db::*;
 ///

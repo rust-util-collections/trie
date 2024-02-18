@@ -14,8 +14,8 @@
 
 use hash_db::Hasher;
 use hex_literal::hex;
-use reference_trie::test_layouts;
-use trie_db::{
+use reference_trie_fun::test_layouts;
+use trie_db_fun::{
 	node::Node, NibbleSlice, TrieDBBuilder, TrieDBNodeDoubleEndedIterator, TrieDoubleEndedIterator,
 	TrieLayout,
 };

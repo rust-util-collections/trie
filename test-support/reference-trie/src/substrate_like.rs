@@ -15,7 +15,7 @@
 //! Codec and layout configuration similar to upstream default substrate one.
 
 use super::{CodecError as Error, NodeCodec as NodeCodecT, *};
-use trie_db::node::Value;
+use trie_db_fun::node::Value;
 
 /// No extension trie with no hashed value.
 pub struct HashedValueNoExt;

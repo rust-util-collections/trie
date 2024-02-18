@@ -13,8 +13,8 @@
 // limitations under the License.
 
 use hash_db::{HashDB, Hasher, EMPTY_PREFIX};
-use reference_trie::{test_layouts, ExtensionLayout};
-use trie_db::{
+use reference_trie_fun::{test_layouts, ExtensionLayout};
+use trie_db_fun::{
 	decode_compact, encode_compact, DBValue, NodeCodec, Recorder, Trie, TrieDBBuilder,
 	TrieDBMutBuilder, TrieError, TrieLayout, TrieMut,
 };

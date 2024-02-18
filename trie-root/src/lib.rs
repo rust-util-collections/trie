@@ -104,7 +104,7 @@ fn shared_prefix_length<T: Eq>(first: &[T], second: &[T]) -> usize {
 /// ```ignore
 /// use hex_literal::hex;
 /// use trie_root::trie_root;
-/// use reference_trie::ReferenceTrieStream;
+/// use reference_trie_fun::ReferenceTrieStream;
 /// use keccak_hasher::KeccakHasher;
 ///
 /// let v = vec![
@@ -247,7 +247,7 @@ where
 /// use hex_literal::hex;
 /// use trie_root::sec_trie_root;
 /// use keccak_hasher::KeccakHasher;
-/// use reference_trie::ReferenceTrieStream;
+/// use reference_trie_fun::ReferenceTrieStream;
 ///
 /// let v = vec![
 /// 	("doe", "reindeer"),
